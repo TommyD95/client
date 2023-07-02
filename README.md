@@ -1,3 +1,6 @@
+Creazione di un e-commerce utilizzando react.ts, redux toolkit, react-router
+I servizi sono disponibili tramite il repository "api" aprendo il terminale sulla cartella del progetto e usando il comando "dotnet run".
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
