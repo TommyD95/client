@@ -1,31 +1,22 @@
-import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, IconButton, Box } from "@mui/material"
-import { BasketViewModel } from "../../../models/BasketViewModel"
-import { Add, Delete, Remove, Title } from "@mui/icons-material"
-import { useStoreContext } from "../../../Context/StoreContext"
-import { useState } from "react"
-import agent from "../../../Api/agent"
-import { LoadingButton } from "@mui/lab"
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, Box } from "@mui/material"
+import { Add, Delete, Remove } from "@mui/icons-material"
 
-const BasketItems = () => {
+import useBasketHook from "../basket.hook"
+import { LoadingButton } from "@mui/lab";
+import { BasketViewModel } from "../../../models/BasketViewModel.model";
 
-    const { basket, setBasket, removeItem } = useStoreContext()
-    const [loading, setLoading] = useState<boolean>(false);
+type IProps = {
+    basket: BasketViewModel;
+}
 
-    const handleAddItem = (productId: number) => {
-        setLoading(true);
-        agent.Basket.addItem(productId, agent.cookieValue ?? "", 1)
-            .then(basket => setBasket(basket))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
-    }
+const BasketItems = (props: IProps) => {
 
-    const handleRemoveItem = (productId: number, quantity = 1) => {
-        setLoading(true);
-        agent.Basket.removeItem(productId, agent.cookieValue ?? "", quantity)
-            .then(() => removeItem(productId, quantity))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false));
-    }
+    const { basket } = props;
+
+    const {
+        loading,
+        handleAddItem,
+        handleRemoveItem } = useBasketHook();
 
     return (
         <TableContainer component={Paper} sx={{ marginTop: 10 }}>

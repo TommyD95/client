@@ -1,12 +1,8 @@
 import { AppBar, Badge, Box, IconButton, Link, List, ListItem, Switch, Toolbar } from "@mui/material"
 import BaseTitle from "../base/baseTitle"
-import { on } from "events";
-import { JsxElement } from "typescript";
-import ProductsList from "../../pages/HomePage/Components/product-list.component";
 import { NavLink, useNavigate } from "react-router-dom";
-import AboutPage from "../../pages/AboutPage/About.page";
 import { ShoppingCart } from "@mui/icons-material";
-import { useStoreContext } from "../../Context/StoreContext";
+import useBasketHook from "../../pages/Basket/basket.hook";
 
 type IProps = {
     onChange: () => void;
@@ -16,7 +12,6 @@ const Header = (props: IProps) => {
 
     const midLinks = [
         { title: 'contact', path: '/contact' },
-        { title: 'about', path: '/about' },
     ]
 
     const rightLinks = [
@@ -28,9 +23,9 @@ const Header = (props: IProps) => {
 
     const { onChange, dark } = props;
 
-    const { basket } = useStoreContext();
+    const { basket } = useBasketHook();
 
-    const itemCount = basket?.items.reduce((sum, item) => sum + item.quantity, 0);
+    const itemCount = basket ? basket?.items.reduce((sum, item) => sum + item.quantity, 0) : 0;
 
     return (
         <>

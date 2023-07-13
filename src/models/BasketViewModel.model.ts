@@ -1,4 +1,4 @@
-import { BasketItemViewModel } from "./BasketItemViewModel"
+import { BasketItemViewModel } from "./BasketItemViewModel.model"
 
 export interface BasketViewModel {
     id: number

@@ -1,41 +1,24 @@
-import { ListItem, ListItemAvatar, Avatar, List, Card, Button, CardActions, CardContent, CardMedia, Typography, Grid, CardHeader, Backdrop, CircularProgress } from "@mui/material";
-import ProductViewModel from "../../../models/ProductViewModel";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
-import agent from "../../../Api/agent";
+import { Avatar, Card, Button, CardActions, CardContent, CardMedia, Typography, Grid, CardHeader } from "@mui/material";
+import ProductViewModel from "../../../models/ProductViewModel.model";
 import LoadingButton from "@mui/lab/LoadingButton/LoadingButton";
-import { useStoreContext } from "../../../Context/StoreContext";
+
+import useProductListhook from "./product-list.hook";
 
 type IProps = {
     products: ProductViewModel[];
+    loading: boolean;
 }
 const ProductsList = (props: IProps) => {
 
-    const { products } = props;
+    const { products, loading } = props;
 
-    const [loading, setLoading] = useState(false);
-
-    const navigate = useNavigate();
-
-    const { setBasket } = useStoreContext();
-
-    const renderToDetails = (id: number) => {
-        navigate(`/productDetails/${id}`)
-    }
-
-    const handleAddItem = (productId: number) => {
-        setLoading(true);
-        agent.Basket.addItem(productId, agent.cookieValue!, 1)
-            .then(basket => setBasket(basket))
-            .catch(error => console.log(error))
-            .finally(() => setLoading(false))
-    }
+    const { handleAddItem, renderToDetails } = useProductListhook();
 
     const viewProducts = () => {
 
         return products ? (products.map((product, i) =>
-            <Grid key={i} container item xs={3}>
-                <Card sx={{ width: 250 }}>
+            <Grid key={i} item xs={4} >
+                <Card style={{ marginLeft: 50 }} sx={{ width: 250 }}>
                     <CardHeader
                         title={product.name}
                         avatar={

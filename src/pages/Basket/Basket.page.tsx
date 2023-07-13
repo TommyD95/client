@@ -1,23 +1,11 @@
 import { Backdrop, Box, Button, CircularProgress, Container, Grid, Typography } from "@mui/material"
-import { useEffect, useState } from "react";
-import { BasketViewModel } from "../../models/BasketViewModel";
-import agent from "../../Api/agent";
-import BaseTable from "./Components/BasketItems.component";
-import { useStoreContext } from "../../Context/StoreContext";
 import BasketItems from "./Components/BasketItems.component";
 import BasketSummary from "./Components/BusketSymmary.component";
-import { useNavigate } from "react-router-dom";
+import useBasketHook from "./basket.hook";
 
 const BasketPage = () => {
 
-    const { basket, loading } = useStoreContext();
-
-    const navigate = useNavigate();
-
-    const redirectToCheckout = () => {
-        navigate("/checkout");
-    }
-
+    const { loading, basket, redirectToCheckout } = useBasketHook();
 
     return (
         <>
@@ -30,11 +18,11 @@ const BasketPage = () => {
             <Container>
                 {basket && basket.items.length > 0 ?
                     <>
-                        <BasketItems />
+                        <BasketItems basket={basket} />
                         <Grid container>
                             <Grid container item sm={6}></Grid>
-                            <Grid container item sm={6}>
-                                <BasketSummary />
+                            <Grid container item sm={6} marginTop={5}>
+                                <BasketSummary basket={basket} />
                                 <Button
                                     color="primary"
                                     size="large"
@@ -50,8 +38,6 @@ const BasketPage = () => {
                     : loading === false
                         ? <Typography variant="h3" color={"InfoText"}>Your basket is empty!</Typography>
                         : null}
-
-
             </Container>
         </>
     )

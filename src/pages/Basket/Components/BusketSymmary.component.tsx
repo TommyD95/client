@@ -1,11 +1,14 @@
 import { TableContainer, Paper, Table, TableBody, TableRow, TableCell, Typography } from "@mui/material";
-import { useContext, useReducer } from "react";
-import { useStoreContext } from "../../../Context/StoreContext";
+import { BasketViewModel } from "../../../models/BasketViewModel.model";
 
-export default function BasketSummary() {
+type IProps = {
+    basket: BasketViewModel
 
-    const { basket } = useStoreContext();
+}
 
+export default function BasketSummary(props: IProps) {
+
+    const { basket } = props
     const subtotal = basket?.items.reduce((sum, item) => sum + (item.quantity * item.price), 0) ?? 0;
     const deliveryFee = subtotal > 10000 ? 0 : 500;
 

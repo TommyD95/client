@@ -1,25 +1,42 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
-import ProductViewModel from "../../models/ProductViewModel";
-import agent from "../../Api/agent";
+import { useEffect, useMemo, useState } from "react";
+import { useFetchFiltersQuery, useFetchListaProductsQuery } from "../../Api/api";
+import { ProductParams } from "../../models/ProductParams.model";
+import MetaData from "../../models/pagination.model";
 
 const useHomePageHook = () => {
 
+    const [productParams, setProductParams] = useState<ProductParams>({
+        orderBy: 'name',
+        searchTerms: '',
+        types: [],
+        brands: [],
+        pageNumber: 1,
+        pageSize: 10,
+    });
 
-    const [products, setProducts] = useState<ProductViewModel[]>([])
-    const [loading, setLoading] = useState<boolean>(true);
-
+    const { data, isLoading, isFetching, } = useFetchListaProductsQuery(productParams);
+    const productsList = useMemo(() => data?.apiResponse || [], [data]);
+    const pagination = useMemo(() => new MetaData(
+        {
+            currentPage: data?.pagination.currentPage,
+            pageSize: data?.pagination.pageSize,
+            totalCount: data?.pagination.totalCount,
+            totalPages: data?.pagination.totalPages
+        }
+    ), [data]);
 
     useEffect(() => {
-        agent.Catalog.list()
-            .then(response => setProducts(response))
-            .catch(e => console.log("error", e))
-            .finally(() => setLoading(false))
-    }, [])
+        console.log("pagination", pagination);
+        console.log("currentPage", pagination.currentPage);
+
+    }, [data])
 
     return {
-        products,
-        loading
+        productsList,
+        isLoading: isLoading || isFetching,
+        productParams,
+        pagination,
+        setProductParams: (params: ProductParams) => setProductParams(params)
     }
 }
 
